@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClipCleats Coach Portal - Team Management</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <h1><i class="fas fa-shield-alt"></i> Clip<span class="cleats">Cleats</span> Coach Portal</h1>
+                <div class="soccer-icons">
+                    <i class="fas fa-whistle"></i>
+                    <i class="fas fa-clipboard-list"></i>
+                    <i class="fas fa-medal"></i>
+                </div>
+            </div>
+            <p>⚽ Manage your team's video collection ⚽</p>
+        </header>
+
+        <main>
+            <!-- Login Section -->
+            <section id="loginSection" class="login-section">
+                <div class="card">
+                    <h2><i class="fas fa-lock"></i> Admin Login</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="adminPassword">Admin Password:</label>
+                            <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Admin Dashboard -->
+            <section id="adminDashboard" class="admin-dashboard hidden">
+                <div class="dashboard-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Coach Dashboard</h2>
+                    <button id="logoutBtn" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalVideos">0</h3>
+                            <p>Total Videos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="activeTokens">0</h3>
+                            <p>Active Tokens</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalDownloads">0</h3>
+                            <p>Total Downloads</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Token Generation -->
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> Generate Download Token</h3>
+                    <form id="tokenGenerationForm" class="token-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tokenExpiry">Expires In (days):</label>
+                                <select id="tokenExpiry" required>
+                                    <option value="1">1 Day</option>
+                                    <option value="3">3 Days</option>
+                                    <option value="7" selected>1 Week</option>
+                                    <option value="14">2 Weeks</option>
+                                    <option value="30">1 Month</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxDownloads">Max Downloads:</label>
+                                <select id="maxDownloads" required>
+                                    <option value="1">1 Download</option>
+                                    <option value="3">3 Downloads</option>
+                                    <option value="5" selected>5 Downloads</option>
+                                    <option value="10">10 Downloads</option>
+                                    <option value="999">Unlimited</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tokenDescription">Description (optional):</label>
+                            <input type="text" id="tokenDescription" placeholder="e.g., Parents from Saturday's championship game">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Generate Token
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Generated Token Display -->
+                <div id="generatedToken" class="card token-display hidden">
+                    <h3><i class="fas fa-check-circle"></i> Token Generated Successfully</h3>
+                    <div class="token-info">
+                        <div class="token-value">
+                            <label>Token:</label>
+                            <div class="copy-container">
+                                <input type="text" id="newTokenValue" readonly>
+                                <button class="btn btn-copy" onclick="copyToken()">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="token-instructions">
+                            Share this access token with parents who need to download game videos. 
+                            They can use it on the main ClipCleats page to access available videos.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Video Management -->
+                <div class="card">
+                    <h3><i class="fas fa-video"></i> Video Management</h3>
+                    
+                    <!-- Upload New Video -->
+                    <div class="upload-section">
+                        <h4><i class="fas fa-upload"></i> Upload New Video</h4>
+                        <form id="videoUploadForm">
+                            <div class="form-group">
+                                <label for="videoFile">Select Video File:</label>
+                                <input type="file" id="videoFile" accept="video/*" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="videoTitle">Video Title:</label>
+                                <input type="text" id="videoTitle" placeholder="e.g., Game vs Eagles - March 15" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="videoDescription">Description (optional):</label>
+                                <textarea id="videoDescription" rows="3" placeholder="Additional details about the video"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Video
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Existing Videos -->
+                    <div class="videos-management">
+                        <h4><i class="fas fa-list"></i> Existing Videos</h4>
+                        <div id="adminVideosList" class="admin-videos-list">
+                            <!-- Videos will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Token Management -->
+                <div class="card">
+                    <h3><i class="fas fa-key"></i> Token Management</h3>
+                    <div id="tokensList" class="tokens-list">
+                        <!-- Tokens will be dynamically loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading and Error States -->
+            <div id="loading" class="loading hidden">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="error" class="error hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="errorMessage">Something went wrong. Please try again.</p>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 ClipCleats | <a href="index.html">Back to Downloads</a></p>
+                <div class="footer-icons">
+                    <i class="fas fa-whistle"></i>
+                    <span>Coaching made easier</span>
+                    <i class="fas fa-whistle"></i>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

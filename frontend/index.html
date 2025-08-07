@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClipCleats - Soccer Video Downloads</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <h1><i class="fas fa-futbol"></i> Clip<span class="cleats">Cleats</span></h1>
+                <div class="soccer-icons">
+                    <i class="fas fa-running"></i>
+                    <i class="fas fa-trophy"></i>
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+            <p>⚽ Your team's soccer moments, captured and shared ⚽</p>
+        </header>
+
+        <main>
+            <!-- Token Input Section -->
+            <section class="token-section">
+                <div class="card">
+                    <h2><i class="fas fa-key"></i> Enter Download Token</h2>
+                    <p>Enter the token provided by your coach or team admin:</p>
+                    <form id="tokenForm">
+                        <div class="input-group">
+                            <input type="text" id="tokenInput" placeholder="Enter your download token" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check"></i> Validate Token
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Token Status Section -->
+            <section id="tokenStatus" class="token-status hidden">
+                <div class="card status-card">
+                    <h3><i class="fas fa-info-circle"></i> Token Status</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="label">Expires:</span>
+                            <span id="tokenExpiry" class="value">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">Downloads Remaining:</span>
+                            <span id="downloadsRemaining" class="value">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Videos Section -->
+            <section id="videosSection" class="videos-section hidden">
+                <div class="card">
+                    <h2><i class="fas fa-video"></i> Available Videos</h2>
+                    <div id="videosList" class="videos-grid">
+                        <!-- Videos will be dynamically loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading and Error States -->
+            <div id="loading" class="loading hidden">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="error" class="error hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="errorMessage">Something went wrong. Please try again.</p>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 ClipCleats | <a href="admin.html">Coach Portal</a></p>
+                <div class="footer-icons">
+                    <i class="fas fa-heart"></i>
+                    <span>Made for soccer families</span>
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
