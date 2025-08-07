@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClipCleats Demo - Soccer Video Downloads</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 50%, #81c784 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Soccer field background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 50%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 90% 50%, rgba(255,255,255,0.1) 2px, transparent 2px),
+                radial-gradient(circle at 50% 50%, transparent 80px, rgba(255,255,255,0.05) 81px, rgba(255,255,255,0.05) 85px, transparent 86px),
+                linear-gradient(90deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%),
+                linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
+            background-size: 100% 100%, 100% 100%, 200px 200px, 100% 100%, 100% 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            position: relative;
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            font-weight: 800;
+            position: relative;
+        }
+
+        header h1 .cleats {
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .soccer-icons {
+            position: absolute;
+            top: -10px;
+            right: -40px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 1.2rem;
+            color: #ffeb3b;
+            opacity: 0.8;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            margin-top: 1rem;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            margin-bottom: 2rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '⚽';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 3rem;
+            opacity: 0.05;
+            transform: rotate(-15deg);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1b5e20, #388e3c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        /* Token Section */
+        .token-section h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Token Status */
+        .status-card {
+            background: linear-gradient(135deg, #c8e6c9, #e8f5e8);
+            border-left: 6px solid #4caf50;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .status-item .label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-item .value {
+            font-weight: 700;
+            color: #2e7d32;
+            font-size: 1.1rem;
+        }
+
+        .status-active {
+            color: #4caf50 !important;
+        }
+
+        /* Videos Section */
+        .videos-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .video-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid #e8f5e8;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.15);
+            border-color: #4caf50;
+        }
+
+        .video-info h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .video-info p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .video-meta div {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        .expiration-warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #ffeaa7;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 2rem;
+            padding: 1rem 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-content a {
+            color: #ffeb3b;
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-icons {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Demo-specific styles */
+        .demo-banner {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .demo-instructions {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .demo-token {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            display: inline-block;
+            margin: 0 4px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .demo-token:hover {
+            background: #bbdefb;
+        }
+
+        /* Support Modal */
+        .support-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .support-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+        }
+
+        .close-support {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .close-support:hover {
+            color: #333;
+        }
+
+        .support-link {
+            color: #ff9800 !important;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .support-link:hover {
+            color: #f57c00 !important;
+            text-decoration: underline;
+        }
+
+        /* Donation Sidebar */
+        .donation-sidebar {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 280px;
+            background: linear-gradient(135deg, #fff9c4, #f9fbe7);
+            border: 3px solid #cddc39;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            z-index: 500;
+            backdrop-filter: blur(10px);
+            animation: slideInRight 1s ease-out 2s both;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateY(-50%) translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(-50%) translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .donation-sidebar.hidden {
+            display: none;
+        }
+
+        .donation-sidebar h3 {
+            color: #558b2f;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .donation-sidebar p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .donation-sidebar .cost-breakdown {
+            background: rgba(255,255,255,0.8);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .donation-sidebar .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+
+        .donation-sidebar .total {
+            border-top: 1px solid #ddd;
+            padding-top: 0.25rem;
+            font-weight: bold;
+            color: #558b2f;
+        }
+
+        .donation-sidebar .btn-donate-sidebar {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .donation-sidebar .btn-donate-sidebar:hover {
+            background: linear-gradient(135deg, #f57c00, #ef6c00);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        .donation-sidebar .close-sidebar {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .donation-sidebar .close-sidebar:hover {
+            background: rgba(0,0,0,0.1);
+            color: #333;
+        }
+
+        .donation-sidebar .demo-note {
+            font-size: 0.75rem;
+            color: #999;
+            text-align: center;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .soccer-icons {
+                right: -20px;
+                font-size: 1rem;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .video-item {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .video-meta {
+                justify-content: center;
+            }
+
+            /* Hide sidebar on mobile, show banner instead */
+            .donation-sidebar {
+                display: none;
+            }
+
+            .mobile-donation-banner {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-donation-banner {
+                display: none;
+            }
+        }
+
+        /* Mobile donation banner */
+        .mobile-donation-banner {
+            background: linear-gradient(135deg, #fff9c4, #f9fbe7);
+            border: 2px solid #cddc39;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            animation: fadeIn 1s ease-out 2s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Demo Banner -->
+        <div class="demo-banner">
+            <h2><i class="fas fa-play-circle"></i> ClipCleats Demo Mode</h2>
+            <p>This is a working demo showing the UI and functionality before Azure deployment</p>
+        </div>
+
+        <header>
+            <div class="logo-container">
+                <h1><i class="fas fa-futbol"></i> Clip<span class="cleats">Cleats</span></h1>
+                <div class="soccer-icons">
+                    <i class="fas fa-running"></i>
+                    <i class="fas fa-trophy"></i>
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+            <p>⚽ Your team's soccer moments, captured and shared ⚽</p>
+        </header>
+
+        <main>
+            <!-- Mobile Donation Banner (shown on small screens) -->
+            <div id="mobileDonationBanner" class="mobile-donation-banner">
+                <h3><i class="fas fa-heart"></i> Support ClipCleats</h3>
+                <p>Help keep ClipCleats free! ~$25/month hosting costs</p>
+                <div style="text-align: center; padding: 10px; background: #f5f5f5; border-radius: 8px; margin: 10px 0;">
+                    <p><strong>Demo Mode</strong></p>
+                    <p style="font-size: 0.8rem;">PayPal integration active after deployment!</p>
+                </div>
+                <button onclick="hideMobileDonationBanner()" style="background: #ccc; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; margin-top: 10px;">Maybe Later</button>
+            </div>
+
+            <!-- Demo Instructions -->
+            <div class="demo-instructions">
+                <h3><i class="fas fa-info-circle"></i> Demo Instructions</h3>
+                <p><strong>Try these demo tokens to see how ClipCleats works:</strong></p>
+                <div style="margin: 10px 0;">
+                    <span class="demo-token" onclick="tryToken('EAGLES-AUG14')">EAGLES-AUG14</span>
+                    <span class="demo-token" onclick="tryToken('LIONS-SEPT2')">LIONS-SEPT2</span>
+                    <span class="demo-token" onclick="tryToken('EXPIRED-TOKEN')">EXPIRED-TOKEN</span>
+                </div>
+                <p><small>Click any token above to automatically test it, or type your own in the field below.</small></p>
+            </div>
+
+            <!-- Token Input Section -->
+            <section class="token-section">
+                <div class="card">
+                    <h2><i class="fas fa-key"></i> Enter Download Token</h2>
+                    <p>Enter the token provided by your coach or team admin:</p>
+                    <form id="tokenForm">
+                        <div class="input-group">
+                            <input type="text" id="tokenInput" placeholder="Enter your download token" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check"></i> Validate Token
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Token Status Section -->
+            <section id="tokenStatus" class="token-status hidden">
+                <div class="card status-card">
+                    <h3><i class="fas fa-info-circle"></i> Token Status</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <span class="label">Expires:</span>
+                            <span id="tokenExpiry" class="value">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">Downloads Remaining:</span>
+                            <span id="downloadsRemaining" class="value">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="label">Status:</span>
+                            <span id="tokenStatusText" class="value status-active">Active</span>
+                        </div>
+                    </div>
+                    <div id="expirationWarning" class="expiration-warning hidden">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="warningText"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Videos Section -->
+            <section id="videosSection" class="videos-section hidden">
+                <div class="card">
+                    <h3><i class="fas fa-video"></i> Available Videos</h3>
+                    <div id="videosList" class="videos-list">
+                        <!-- Videos will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading and Error States -->
+            <div id="loading" class="loading hidden">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading...</p>
+            </div>
+
+            <div id="error" class="error hidden">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p id="errorMessage">Something went wrong. Please try again.</p>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 ClipCleats | <a href="demo-admin.html">Coach Portal Demo</a> | <a href="#support" onclick="showSupportInfo()" class="support-link">💝 Support ClipCleats</a></p>
+                <div class="footer-icons">
+                    <i class="fas fa-heart"></i>
+                    <span>Made for soccer families</span>
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            
+            <!-- Support Info Modal -->
+            <div id="supportModal" class="support-modal hidden">
+                <div class="support-content">
+                    <span class="close-support" onclick="hideSupportInfo()">&times;</span>
+                    <h3><i class="fas fa-heart"></i> Support ClipCleats</h3>
+                    <p>ClipCleats costs ~$20-25/month to host. Your optional donations help keep this free for all soccer families!</p>
+                    <div class="support-buttons">
+                        <div style="text-align: center; padding: 20px; background: #f5f5f5; border-radius: 8px;">
+                            <p><strong>Demo Mode</strong></p>
+                            <p>PayPal integration will be active after deployment!</p>
+                        </div>
+                    </div>
+                    <p><small>💙 Thank you for helping keep ClipCleats running!</small></p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Donation Sidebar (desktop) -->
+        <div id="donationSidebar" class="donation-sidebar">
+            <button class="close-sidebar" onclick="hideDonationSidebar()" title="Close">&times;</button>
+            <h3><i class="fas fa-heart"></i> Keep ClipCleats Free!</h3>
+            <p>ClipCleats helps soccer families share precious game moments at no cost to them.</p>
+            
+            <div class="cost-breakdown">
+                <div class="cost-item">
+                    <span>Azure Hosting:</span>
+                    <span>~$20/mo</span>
+                </div>
+                <div class="cost-item">
+                    <span>Storage & CDN:</span>
+                    <span>~$5/mo</span>
+                </div>
+                <div class="cost-item total">
+                    <span>Total Monthly:</span>
+                    <span>~$25</span>
+                </div>
+            </div>
+
+            <a href="#" class="btn-donate-sidebar" onclick="showSupportInfo()">
+                <i class="fas fa-paypal"></i> Donate $5
+            </a>
+            <a href="#" class="btn-donate-sidebar" onclick="showSupportInfo()">
+                <i class="fas fa-paypal"></i> Donate $10
+            </a>
+            <a href="#" class="btn-donate-sidebar" onclick="showSupportInfo()">
+                <i class="fas fa-paypal"></i> Donate $25
+            </a>
+
+            <div class="demo-note">
+                💙 Every donation helps keep this service free for all soccer families!
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        // Demo-specific JavaScript
+        const demoTokens = {
+            'EAGLES-AUG14': {
+                valid: true,
+                tokenData: {
+                    tokenId: 'EAGLES-AUG14',
+                    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    maxDownloads: 5,
+                    currentDownloads: 2,
+                    downloadsRemaining: 3,
+                    daysRemaining: 7,
+                    expirationWarning: '3 downloads remaining, expires in 7 days',
+                    allowedVideos: [
+                        {
+                            videoId: 'eagles-vs-lions-highlights',
+                            title: 'Eagles vs Lions - Game Highlights',
+                            description: 'Best moments from Saturday\'s championship game',
+                            fileName: 'eagles-lions-highlights.mp4',
+                            fileSize: 125000000,
+                            uploadDate: '2025-08-05T10:30:00Z'
+                        },
+                        {
+                            videoId: 'eagles-victory-celebration',
+                            title: 'Victory Celebration & Team Photos',
+                            description: 'Post-game celebration and team photos',
+                            fileName: 'victory-celebration.mp4',
+                            fileSize: 89000000,
+                            uploadDate: '2025-08-05T12:15:00Z'
+                        }
+                    ],
+                    description: 'Championship game access for Eagles parents'
+                }
+            },
+            'LIONS-SEPT2': {
+                valid: true,
+                tokenData: {
+                    tokenId: 'LIONS-SEPT2',
+                    expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+                    maxDownloads: 1,
+                    currentDownloads: 0,
+                    downloadsRemaining: 1,
+                    daysRemaining: 2,
+                    expirationWarning: '⚠️ Only 1 download remaining (expires in 2 days)',
+                    allowedVideos: [
+                        {
+                            videoId: 'lions-training-session',
+                            title: 'Lions Training Session - Sept 2',
+                            description: 'Practice highlights and skill development',
+                            fileName: 'lions-training-sept2.mp4',
+                            fileSize: 156000000,
+                            uploadDate: '2025-09-02T16:00:00Z'
+                        }
+                    ],
+                    description: 'Training session access for Lions team'
+                }
+            },
+            'EXPIRED-TOKEN': {
+                valid: false,
+                message: 'Token expired on 07/30/2025',
+                reason: 'TIME_EXPIRED'
+            }
+        };
+
+        function tryToken(token) {
+            document.getElementById('tokenInput').value = token;
+            validateToken(token);
+        }
+
+        async function validateToken(token) {
+            showLoading(true);
+            hideError();
+
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            showLoading(false);
+
+            const response = demoTokens[token];
+            
+            if (!response) {
+                showError('Invalid token. Try one of the demo tokens above!');
+                return;
+            }
+
+            if (!response.valid) {
+                displayTokenInvalid(response);
+                return;
+            }
+
+            displayTokenValid(response.tokenData);
+            displayVideos(response.tokenData.allowedVideos);
+            localStorage.setItem('clipcleatsToken', token);
+        }
+
+        function displayTokenValid(tokenData) {
+            const tokenStatus = document.getElementById('tokenStatus');
+            const expiryElement = document.getElementById('tokenExpiry');
+            const remainingElement = document.getElementById('downloadsRemaining');
+            const statusElement = document.getElementById('tokenStatusText');
+            const warningElement = document.getElementById('expirationWarning');
+            const warningText = document.getElementById('warningText');
+
+            const expiryDate = new Date(tokenData.expiresAt);
+            const daysUntilExpiry = Math.ceil((expiryDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+
+            expiryElement.innerHTML = `
+                <div class="time-limit">📅 ${daysUntilExpiry > 0 ? `${daysUntilExpiry} day(s)` : 'Expired'} (${expiryDate.toLocaleDateString()})</div>
+            `;
+            
+            remainingElement.innerHTML = `
+                <div class="download-limit">🔽 ${tokenData.downloadsRemaining} / ${tokenData.maxDownloads}</div>
+            `;
+
+            statusElement.textContent = 'Active';
+            statusElement.className = 'value status-active';
+
+            if (tokenData.daysRemaining <= 3 || tokenData.downloadsRemaining <= 2) {
+                warningElement.classList.remove('hidden');
+                warningText.textContent = tokenData.expirationWarning;
+            } else {
+                warningElement.classList.add('hidden');
+            }
+
+            tokenStatus.classList.remove('hidden');
+        }
+
+        function displayTokenInvalid(response) {
+            showError(response.message);
+        }
+
+        function displayVideos(videos) {
+            const videosSection = document.getElementById('videosSection');
+            const videosList = document.getElementById('videosList');
+            
+            videosList.innerHTML = '';
+
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.innerHTML = `
+                    <div class="video-info">
+                        <h4><i class="fas fa-play-circle"></i> ${video.title}</h4>
+                        <p>${video.description}</p>
+                        <div class="video-meta">
+                            <div><i class="fas fa-hdd"></i> ${(video.fileSize / 1024 / 1024).toFixed(1)} MB</div>
+                            <div><i class="fas fa-calendar"></i> ${new Date(video.uploadDate).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    <div class="video-actions">
+                        <button class="btn btn-primary" onclick="downloadVideo('${video.videoId}')">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                `;
+                videosList.appendChild(videoItem);
+            });
+
+            videosSection.classList.remove('hidden');
+        }
+
+        async function downloadVideo(videoId) {
+            showSuccess(`Demo: Starting download for ${videoId}. In production, this would download the actual video file!`);
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.remove('hidden');
+            } else {
+                loading.classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            const error = document.getElementById('error');
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            error.classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('error').classList.add('hidden');
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.style.cssText = `
+                background: #4caf50;
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 1000;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            `;
+            successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(successDiv);
+            }, 4000);
+        }
+
+        // Support modal functions
+        function showSupportInfo() {
+            document.getElementById('supportModal').classList.remove('hidden');
+        }
+
+        function hideSupportInfo() {
+            document.getElementById('supportModal').classList.add('hidden');
+        }
+
+        // Donation sidebar functions
+        function hideDonationSidebar() {
+            document.getElementById('donationSidebar').classList.add('hidden');
+            localStorage.setItem('donationSidebarHidden', 'true');
+        }
+
+        function hideMobileDonationBanner() {
+            document.getElementById('mobileDonationBanner').style.display = 'none';
+            localStorage.setItem('mobileDonationBannerHidden', 'true');
+        }
+
+        // Show donation sidebar after delay (unless previously hidden)
+        function showDonationSidebarIfNeeded() {
+            if (!localStorage.getItem('donationSidebarHidden')) {
+                setTimeout(() => {
+                    const sidebar = document.getElementById('donationSidebar');
+                    if (sidebar && window.innerWidth > 768) {
+                        sidebar.style.display = 'block';
+                    }
+                }, 3000); // Show after 3 seconds
+            }
+        }
+
+        // Show mobile banner if needed
+        function showMobileBannerIfNeeded() {
+            if (!localStorage.getItem('mobileDonationBannerHidden') && window.innerWidth <= 768) {
+                setTimeout(() => {
+                    const banner = document.getElementById('mobileDonationBanner');
+                    if (banner) {
+                        banner.style.display = 'block';
+                    }
+                }, 2000); // Show after 2 seconds
+            }
+        }
+
+        // Form handler
+        document.getElementById('tokenForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const token = document.getElementById('tokenInput').value.trim();
+            if (token) {
+                validateToken(token);
+            }
+        });
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('supportModal');
+            if (e.target === modal) {
+                hideSupportInfo();
+            }
+        });
+
+        // Check for stored token on load
+        window.addEventListener('load', () => {
+            const storedToken = localStorage.getItem('clipcleatsToken');
+            if (storedToken && demoTokens[storedToken]) {
+                document.getElementById('tokenInput').value = storedToken;
+                validateToken(storedToken);
+            }
+
+            // Show donation elements after page load
+            showDonationSidebarIfNeeded();
+            showMobileBannerIfNeeded();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const sidebar = document.getElementById('donationSidebar');
+            const banner = document.getElementById('mobileDonationBanner');
+            
+            if (window.innerWidth <= 768) {
+                if (sidebar) sidebar.style.display = 'none';
+                if (!localStorage.getItem('mobileDonationBannerHidden') && banner) {
+                    banner.style.display = 'block';
+                }
+            } else {
+                if (banner) banner.style.display = 'none';
+                if (!localStorage.getItem('donationSidebarHidden') && sidebar) {
+                    sidebar.style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

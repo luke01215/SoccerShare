@@ -306,3 +306,20 @@ let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new ClipCleatsApp();
 });
+
+// Support modal functions
+function showSupportInfo() {
+    document.getElementById('supportModal').classList.remove('hidden');
+}
+
+function hideSupportInfo() {
+    document.getElementById('supportModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside of it
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('supportModal');
+    if (e.target === modal) {
+        hideSupportInfo();
+    }
+});
