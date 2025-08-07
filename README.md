@@ -1,37 +1,117 @@
-# ClipCleats ⚽
+# 🥅 ClipCleats - Secure Soccer Video Sharing Platform ⚽
 
-A secure soccer video sharing platform for teams and families. Features controlled access through admin-generated download tokens, beautiful soccer-themed UI, and cost-effective Azure hosting.
+**A production-ready soccer video sharing platform for teams and families.** Features enterprise-grade security with admin-generated download tokens, beautiful soccer-themed UI, and cost-effective Azure hosting.
 
-## 📋 Project Overview
+---
 
-### What is ClipCleats?
-ClipCleats is a professional soccer video sharing application that allows coaches to securely share game footage, highlights, and training videos with parents and players. The platform features a beautiful soccer-themed design with secure token-based access control.
+## 🏆 **What We Built**
 
-### Key Features
-- 🏆 **Beautiful Soccer Theme**: Professional design with soccer field patterns and sport iconography
-- 🔐 **Secure Access Control**: bcrypt-encrypted admin authentication with JWT tokens
-- 📱 **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- ⚽ **Team-Focused**: Built specifically for soccer teams and families
-- 💰 **Cost-Effective**: Designed for minimal Azure hosting costs ($5-15/month)
-- 🛡️ **Production Security**: No hardcoded passwords, server-side authentication
+ClipCleats is a professional soccer video sharing application that allows coaches to securely share game footage, highlights, and training videos with parents and players. The platform features a beautiful soccer-themed design with military-grade security and advanced token-based access control.
 
-## 🏗️ Architecture
+## ⚡ **Key Features Implemented**
 
-### Current Implementation: Static Web App + Azure Functions
-**Secure & Cost-Effective Solution**
+### 🔐 **Enterprise Security**
+- ✅ **bcrypt Password Hashing** - Military-grade admin authentication (10 salt rounds)
+- ✅ **JWT Token Authentication** - Secure session management 
+- ✅ **Dual Token Expiration** - Time-based AND download-limit restrictions
+- ✅ **Server-Side Validation** - All authentication happens on Azure backend
+- ✅ **Environment Variable Security** - Zero hardcoded passwords or secrets
+- ✅ **Production Security Audit** - Passed comprehensive security scan
+
+### ⚽ **Advanced Token System**
+- ✅ **Session-Based Tokens** - Generate tokens like "EAGLES-AUG14" for specific games
+- ✅ **Download Limits** - Restrict number of downloads per token (1-999 or unlimited)
+- ✅ **Time Expiration** - Set tokens to expire in 1-30 days
+- ✅ **Usage Tracking** - Real-time monitoring of downloads and token usage
+- ✅ **Bulk Token Management** - Admin dashboard for managing all active tokens
+
+### 🎨 **Beautiful Soccer Theme**
+- ✅ **Responsive Design** - Works perfectly on phones, tablets, and desktops
+- ✅ **Soccer Field Backgrounds** - Authentic grass texture patterns
+- ✅ **Font Awesome Icons** - Professional soccer-themed iconography
+- ✅ **ClipCleats Branding** - Complete rebrand from "SoccerShare"
+- ✅ **Intuitive UX** - Parent-friendly interface with clear status indicators
+
+### 🏗️ **Production Infrastructure**
+- ✅ **Azure Static Web Apps** - Serverless frontend hosting ($0-5/month)
+- ✅ **Azure Functions** - Serverless backend APIs ($5-10/month)
+- ✅ **Azure Blob Storage** - Secure video file storage ($5-15/month)
+- ✅ **Azure Table Storage** - Token and usage database ($1-3/month)
+- ✅ **Bicep Infrastructure** - Automated deployment templates
+- ✅ **PowerShell Automation** - One-command deployment script
+
+---
+
+## 📁 **Project Structure**
 
 ```
-Frontend (Static Web App - FREE tier)
-├── index.html - Main user interface for token validation & downloads
-├── admin.html - Coach portal for login & token generation
-├── styles.css - Soccer-themed responsive design
-└── JavaScript - Secure API communication (no demo credentials)
+ClipCleats/
+├── 📱 frontend/
+│   ├── index.html              # Parent interface for token validation & downloads
+│   ├── admin.html              # Coach portal for login & token generation  
+│   ├── css/styles.css          # Soccer-themed responsive design
+│   └── js/
+│       ├── app.js              # Main app logic with dual expiration display
+│       ├── admin.js            # Admin dashboard with real API integration
+│       └── config.js           # Production configuration (no demo content)
+│
+├── ⚙️ backend/
+│   ├── functions/
+│   │   ├── adminLogin.ts       # Secure bcrypt authentication with JWT
+│   │   ├── validateToken.ts    # Dual expiration validation & usage tracking
+│   │   ├── downloadVideo.ts    # Secure video downloads with SAS URLs
+│   │   └── generateSessionToken.ts # Admin token creation with restrictions
+│   ├── shared/utils.ts         # Security utilities & environment validation
+│   └── package.json            # TypeScript Azure Functions dependencies
+│
+├── 🏗️ infrastructure/
+│   ├── main.bicep              # Complete Azure infrastructure template
+│   └── deploy.ps1              # Automated deployment script
+│
+└── 📚 docs/
+    ├── PRODUCTION-CHECKLIST.md # Security setup & deployment guide
+    ├── deployment-guide.md     # Step-by-step deployment instructions
+    ├── security-guide.md       # Security implementation details
+    └── user-guide.md           # Parent and coach usage guide
+```
 
-Backend (Azure Functions - Consumption Plan)
-├── adminLogin.ts - Secure bcrypt authentication with JWT
-├── validateToken.ts - Token validation and usage tracking
-├── generateToken.ts - Admin token creation
-└── utils.ts - Shared utilities and security functions
+---
+
+## 🚀 **Getting Started (30 seconds to deploy!)**
+
+### **Prerequisites**
+- Azure subscription  
+- Azure CLI installed
+- PowerShell (Windows) or PowerShell Core (Mac/Linux)
+
+### **1. Clone & Deploy**
+```powershell
+git clone https://github.com/luke01215/SoccerShare.git
+cd SoccerShare
+.\infrastructure\deploy.ps1 -ResourceGroupName "clipcleats-prod" -Location "East US"
+```
+
+### **2. Set Environment Variables**
+In Azure Portal → Function App → Configuration, add:
+
+```bash
+# Generate secure admin password hash
+ADMIN_PASSWORD_HASH="$2b$10$..." # Use bcrypt to hash your password
+
+# Generate random JWT secret  
+JWT_SECRET="abc123def456..."     # 64-character random string
+
+# Azure Storage connection (auto-generated)
+AZURE_STORAGE_CONNECTION_STRING="DefaultEndpointsProtocol=https;..."
+```
+
+### **3. Upload Videos & Generate Tokens**
+1. Upload soccer videos to Azure Blob Storage
+2. Login to admin portal with your secure password
+3. Generate session tokens (e.g., "EAGLES-AUG14", "PRACTICE-MONDAY")
+4. Share tokens with parents via text/email
+
+**🎉 That's it! Your secure soccer video platform is live!**
 
 Storage (Azure Services)
 ├── Blob Storage - Video files (Cool/Archive tiers)

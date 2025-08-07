@@ -46,7 +46,7 @@ class ClipCleatsApp {
         try {
             // For now, we'll simulate the API call
             // Replace this with actual API call once backend is deployed
-            const response = await this.simulateTokenValidation(token);
+            const response = await this.validateTokenWithBackend(token);
             
             if (response.valid) {
                 this.currentToken = token;
@@ -65,9 +65,8 @@ class ClipCleatsApp {
         }
     }
 
-    // Production-only token validation - NO DEMO TOKENS
-    async simulateTokenValidation(token) {
-        // This will ONLY work when deployed to Azure with proper backend
+    // PRODUCTION TOKEN VALIDATION - Backend API only
+    async validateTokenWithBackend(token) {
         try {
             const response = await fetch(this.apiBaseUrl + '/tokens/validate', {
                 method: 'POST',
@@ -76,15 +75,16 @@ class ClipCleatsApp {
             });
             
             if (response.ok) {
-                return await response.json();
+                const result = await response.json();
+                return result;
             } else {
                 return { valid: false, message: 'Invalid or expired token' };
             }
         } catch (error) {
-            // If backend isn't available, show helpful message
+            console.error('Token validation error:', error);
             return { 
                 valid: false, 
-                message: 'Backend not available. Deploy to Azure first.' 
+                message: 'Unable to validate token. Please ensure ClipCleats backend is deployed to Azure.' 
             };
         }
     }
@@ -97,17 +97,39 @@ class ClipCleatsApp {
         // Format expiry date
         const expiryDate = new Date(tokenData.expiresAt);
         const now = new Date();
+        // Display expiry with dual limits awareness
         const daysUntilExpiry = Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24));
         
-        expiryElement.textContent = daysUntilExpiry > 0 
-            ? `${daysUntilExpiry} day(s) (${expiryDate.toLocaleDateString()})`
-            : 'Expired';
-
-        // Calculate remaining downloads
+        // Show both time and download limits
         const remaining = tokenData.maxDownloads - tokenData.currentDownloads;
-        remainingElement.textContent = tokenData.maxDownloads === 999 
-            ? 'Unlimited' 
-            : `${remaining} of ${tokenData.maxDownloads}`;
+        
+        expiryElement.innerHTML = `
+            <div class="dual-expiry-display">
+                <div class="time-limit">📅 ${daysUntilExpiry > 0 ? `${daysUntilExpiry} day(s)` : 'Expired'} (${expiryDate.toLocaleDateString()})</div>
+                <div class="or-divider">OR</div>
+                <div class="download-limit">📥 ${remaining} downloads remaining</div>
+            </div>
+        `;
+
+        // Calculate remaining downloads with progress indication
+        const downloadProgress = ((tokenData.maxDownloads - remaining) / tokenData.maxDownloads) * 100;
+        remainingElement.innerHTML = tokenData.maxDownloads === 999 
+            ? 'Unlimited downloads' 
+            : `
+                <div class="download-progress-container">
+                    <span class="download-count">${remaining}/${tokenData.maxDownloads} downloads left</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${downloadProgress}%"></div>
+                    </div>
+                </div>
+            `;
+
+        // Add warning classes based on limits
+        if (remaining <= 1 || daysUntilExpiry <= 1) {
+            tokenStatus.classList.add('critical-warning');
+        } else if (remaining <= 3 || daysUntilExpiry <= 3) {
+            tokenStatus.classList.add('warning');
+        }
 
         tokenStatus.classList.remove('hidden');
     }

@@ -3,11 +3,15 @@ import { TableClient } from '@azure/data-tables';
 import { BlobServiceClient } from '@azure/storage-blob';
 import jwt from 'jsonwebtoken';
 
-// Environment variables
+// Environment variables - PRODUCTION READY
 export const config = {
     storageConnectionString: process.env.AZURE_STORAGE_CONNECTION_STRING || '',
-    jwtSecret: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-    adminPassword: process.env.ADMIN_PASSWORD || 'admin123',
+    jwtSecret: process.env.JWT_SECRET || (() => {
+        throw new Error('JWT_SECRET environment variable is required for production');
+    })(),
+    adminPasswordHash: process.env.ADMIN_PASSWORD_HASH || (() => {
+        throw new Error('ADMIN_PASSWORD_HASH environment variable is required for production');
+    })(),
     blobContainerName: 'soccer-videos',
     tokensTableName: 'DownloadTokens',
     usageTableName: 'DownloadUsage',
@@ -153,7 +157,7 @@ export const createSuccessResponse = (data: any, statusCode: number = 200) => {
 };
 
 // Initialize storage tables
-export const initializeStorage = async (): Promise<void> => {
+export const initializeStorage = async (context?: any): Promise<void> => {
     try {
         // Create tables if they don't exist
         const tokensTable = createTableClient(config.tokensTableName);
@@ -173,9 +177,13 @@ export const initializeStorage = async (): Promise<void> => {
             access: 'blob'
         });
         
-        console.log('Storage initialization completed');
+        if (context?.log) {
+            context.log('Storage initialization completed');
+        }
     } catch (error) {
-        console.error('Storage initialization failed:', error);
+        if (context?.log) {
+            context.log.error('Storage initialization failed:', error);
+        }
         throw error;
     }
 };

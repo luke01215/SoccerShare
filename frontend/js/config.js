@@ -10,55 +10,14 @@ window.CLIPCLEATS_CONFIG = {
     tagline: 'Your team\'s soccer moments, captured and shared',
     version: '1.0.0',
     
-    // Demo/Development Settings
-    isDevelopment: false, // Changed to false for security
+    // Production Settings
+    isDevelopment: false,
     
-    // Demo tokens removed for security - only work with real backend
+    // Production-only: No demo tokens for security
     demoTokens: {},
     
-    // Demo videos for testing
-    demoVideos: [
-        {
-            id: 'video1',
-            title: '🏆 Championship Final vs Thunder Eagles - March 15, 2025',
-            description: 'Epic championship match with amazing goals and team spirit!',
-            uploadDate: '2025-03-15',
-            fileSize: '245 MB',
-            duration: '45 minutes'
-        },
-        {
-            id: 'video2',
-            title: '⚽ Skills & Drills Practice - March 12, 2025',
-            description: 'Tuesday evening practice focusing on dribbling, passing, and shooting techniques',
-            uploadDate: '2025-03-12',
-            fileSize: '189 MB',
-            duration: '32 minutes'
-        },
-        {
-            id: 'video3',
-            title: '🥅 Tournament Semi-Finals - March 8, 2025',
-            description: 'Incredible comeback victory with stunning goals and celebrations',
-            uploadDate: '2025-03-08',
-            fileSize: '312 MB',
-            duration: '52 minutes'
-        },
-        {
-            id: 'video4',
-            title: '🤝 Team Building & Fun Games - March 5, 2025',
-            description: 'Pre-season bonding activities, scrimmages, and team-building exercises',
-            uploadDate: '2025-03-05',
-            fileSize: '156 MB',
-            duration: '28 minutes'
-        },
-        {
-            id: 'video5',
-            title: '⭐ Player Highlights Reel - Season 2025',
-            description: 'Best moments, goals, and saves from our amazing players this season',
-            uploadDate: '2025-03-01',
-            fileSize: '198 MB',
-            duration: '15 minutes'
-        }
-    ],
+    // Production-only: No demo videos - all content from Azure Storage
+    demoVideos: [],
     
     // UI Configuration
     ui: {

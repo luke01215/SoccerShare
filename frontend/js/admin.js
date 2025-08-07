@@ -1,37 +1,8 @@
 // ClipCleats - Admin JavaScript
 class ClipCleatsAdmin {
-    constructor()    // Temporary simulation - replace with actual API call
-    async simulateAdminAuth(password) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // In production, this will be a secure API call to the backend
-        // The backend will hash and validate the password securely
-        // For demo purposes only - DO NOT USE IN PRODUCTION
-        console.warn('⚠️ WARNING: Using demo authentication - NOT SECURE for production!');
-        
-        // This should be replaced with:
-        // const response = await fetch('/api/admin/login', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ password })
-        // });
-        // return await response.json();
-        
-        // Demo validation only - remove this when deploying
-        if (window.CLIPCLEATS_UTILS && window.CLIPCLEATS_UTILS.isDevelopment()) {
-            const demoPasswords = ['admin123', 'clipcleats2025', 'coach123'];
-            if (demoPasswords.includes(password)) {
-                return {
-                    success: true,
-                    token: 'demo_jwt_token_' + Date.now()
-                };
-            }
-        }
-        
-        return { 
-            success: false, 
-            message: 'Authentication must be configured in production environment' 
-        };s.apiBaseUrl = window.CLIPCLEATS_UTILS ? window.CLIPCLEATS_UTILS.getApiUrl('') : '/api';
+    constructor() {
+        // Set API base URL and initialize admin token
+        this.apiBaseUrl = window.CLIPCLEATS_UTILS ? window.CLIPCLEATS_UTILS.getApiUrl('') : '/api';
         this.adminToken = null;
         this.init();
     }
@@ -159,60 +130,60 @@ class ClipCleatsAdmin {
         }
     }
 
-    // Temporary simulations - replace with actual API calls
+    // Production API calls - replace simulations after deployment
     async simulateStatsLoad() {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // TODO: Replace with actual API call to /api/admin/stats
+        try {
+            const response = await fetch(this.apiBaseUrl + '/admin/stats', {
+                headers: { 'Authorization': `Bearer ${this.adminToken}` }
+            });
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.log('Stats API not available yet, using defaults');
+        }
+        
+        // Default values when backend is not ready
         return {
-            totalVideos: 8,
-            activeTokens: 12,
-            totalDownloads: 47
+            totalVideos: 0,
+            activeTokens: 0,
+            totalDownloads: 0
         };
     }
 
     async simulateTokensLoad() {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        return [
-            {
-                id: 'token1',
-                value: 'demo123',
-                description: 'Parent group - March game',
-                expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-                maxDownloads: 5,
-                currentDownloads: 2,
-                createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-            },
-            {
-                id: 'token2',
-                value: 'parent456',
-                description: 'Extended family access',
-                expiresAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-                maxDownloads: 3,
-                currentDownloads: 0,
-                createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        // TODO: Replace with actual API call to /api/admin/tokens
+        try {
+            const response = await fetch(this.apiBaseUrl + '/admin/tokens', {
+                headers: { 'Authorization': `Bearer ${this.adminToken}` }
+            });
+            if (response.ok) {
+                return await response.json();
             }
-        ];
+        } catch (error) {
+            console.log('Tokens API not available yet, showing empty list');
+        }
+        
+        // Empty list when backend is not ready
+        return [];
     }
 
     async simulateVideosLoad() {
-        await new Promise(resolve => setTimeout(resolve, 400));
-        return [
-            {
-                id: 'video1',
-                title: 'Game vs Thunder Eagles - March 15, 2025',
-                description: 'Full game footage',
-                uploadDate: '2025-03-15',
-                fileSize: '245 MB',
-                downloads: 15
-            },
-            {
-                id: 'video2',
-                title: 'Skills Practice - March 12, 2025',
-                description: 'Tuesday practice',
-                uploadDate: '2025-03-12',
-                fileSize: '189 MB',
-                downloads: 8
+        // TODO: Replace with actual API call to /api/admin/videos
+        try {
+            const response = await fetch(this.apiBaseUrl + '/admin/videos', {
+                headers: { 'Authorization': `Bearer ${this.adminToken}` }
+            });
+            if (response.ok) {
+                return await response.json();
             }
-        ];
+        } catch (error) {
+            console.log('Videos API not available yet, showing empty list');
+        }
+        
+        // Empty list when backend is not ready
+        return [];
     }
 
     updateStats(stats) {

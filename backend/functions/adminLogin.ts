@@ -24,23 +24,23 @@ export async function adminLogin(request: HttpRequest, context: InvocationContex
         const { password } = requestBody;
 
         // Get the admin password from environment variables
-        const adminPasswordHash = config.adminPassword;
+        const adminPasswordHash = config.adminPasswordHash;
         
         // In production, this should be a hashed password
-        // For now, we'll do a simple comparison, but this should be bcrypt.compare()
+        // Production-only: ONLY bcrypt comparison allowed
         let isValidPassword = false;
         
         if (adminPasswordHash.startsWith('$2')) {
-            // It's already hashed with bcrypt
+            // It's properly hashed with bcrypt
             isValidPassword = await bcrypt.compare(password, adminPasswordHash);
         } else {
-            // Plain text comparison (only for development)
-            isValidPassword = password === adminPasswordHash;
-            context.log.warn('WARNING: Using plain text password comparison. Use hashed passwords in production!');
+            // SECURITY: Never allow plain text passwords in production
+            context.log('ERROR: ADMIN_PASSWORD_HASH must be a bcrypt hash starting with $2. Plain text passwords are not allowed.');
+            return createErrorResponse('Invalid server configuration. Admin password must be properly hashed.', 500);
         }
 
         if (!isValidPassword) {
-            context.log.warn('Failed admin login attempt');
+            context.log('Failed admin login attempt');
             return createErrorResponse('Invalid credentials', 401);
         }
 
@@ -55,7 +55,7 @@ export async function adminLogin(request: HttpRequest, context: InvocationContex
         });
 
     } catch (error) {
-        context.log.error('Admin login error:', error);
+        context.log('Admin login error:', error);
         return createErrorResponse('Authentication failed', 500);
     }
 }
