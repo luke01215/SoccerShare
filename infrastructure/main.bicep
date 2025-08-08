@@ -109,21 +109,25 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
           name: 'AZURE_STORAGE_CONNECTION_STRING'
           value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
         }
-        {
-          name: 'JWT_SECRET'
-          value: 'change-this-in-production-${uniqueString(resourceGroup().id)}'
-        }
-        {
-          name: 'ADMIN_PASSWORD'
-          value: 'ClipCleats2025!SecureCoach'
-        }
+        // SECURITY: These must be set manually in Azure Portal after deployment
+        // DO NOT set sensitive values in Bicep templates
+        // {
+        //   name: 'JWT_SECRET'
+        //   value: 'SET_IN_AZURE_PORTAL_AFTER_DEPLOYMENT'
+        // }
+        // {
+        //   name: 'ADMIN_PASSWORD_HASH'
+        //   value: 'SET_BCRYPT_HASH_IN_AZURE_PORTAL_AFTER_DEPLOYMENT'
+        // }
       ]
       ftpsState: 'FtpsOnly'
       minTlsVersion: '1.2'
       cors: {
         allowedOrigins: [
           'https://portal.azure.com'
-          '*' // Allow all origins for development - restrict in production
+          // PRODUCTION: Replace with your actual domain
+          // 'https://your-clipcleats-domain.com'
+          // SECURITY: Never use '*' in production
         ]
       }
     }

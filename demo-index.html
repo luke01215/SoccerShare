@@ -21,9 +21,10 @@
             background-attachment: fixed;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Soccer field background pattern */
+        /* Enhanced Soccer field background pattern */
         body::before {
             content: '';
             position: fixed;
@@ -32,14 +33,84 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 10% 50%, rgba(255,255,255,0.1) 2px, transparent 2px),
-                radial-gradient(circle at 90% 50%, rgba(255,255,255,0.1) 2px, transparent 2px),
-                radial-gradient(circle at 50% 50%, transparent 80px, rgba(255,255,255,0.05) 81px, rgba(255,255,255,0.05) 85px, transparent 86px),
-                linear-gradient(90deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%),
-                linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
-            background-size: 100% 100%, 100% 100%, 200px 200px, 100% 100%, 100% 100%;
+                /* Goal posts at top and bottom */
+                linear-gradient(90deg, transparent 48%, rgba(255,255,255,0.3) 48.5%, rgba(255,255,255,0.3) 49%, transparent 49.5%),
+                linear-gradient(90deg, transparent 50.5%, rgba(255,255,255,0.3) 51%, rgba(255,255,255,0.3) 51.5%, transparent 52%),
+                linear-gradient(0deg, transparent 0%, rgba(255,255,255,0.3) 2%, rgba(255,255,255,0.3) 4%, transparent 4%),
+                linear-gradient(0deg, transparent 96%, rgba(255,255,255,0.3) 96%, rgba(255,255,255,0.3) 98%, transparent 98%),
+                
+                /* Penalty areas */
+                linear-gradient(0deg, transparent 10%, rgba(255,255,255,0.15) 10%, rgba(255,255,255,0.15) 25%, transparent 25%),
+                linear-gradient(0deg, transparent 75%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.15) 90%, transparent 90%),
+                linear-gradient(90deg, transparent 35%, rgba(255,255,255,0.15) 35%, rgba(255,255,255,0.15) 65%, transparent 65%),
+                
+                /* Center circle */
+                radial-gradient(circle at 50% 50%, transparent 80px, rgba(255,255,255,0.2) 81px, rgba(255,255,255,0.2) 85px, transparent 86px),
+                
+                /* Center line */
+                linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.2) 50%, transparent 51%),
+                
+                /* Corner arcs */
+                radial-gradient(circle at 0% 0%, transparent 25px, rgba(255,255,255,0.15) 26px, rgba(255,255,255,0.15) 30px, transparent 31px),
+                radial-gradient(circle at 100% 0%, transparent 25px, rgba(255,255,255,0.15) 26px, rgba(255,255,255,0.15) 30px, transparent 31px),
+                radial-gradient(circle at 0% 100%, transparent 25px, rgba(255,255,255,0.15) 26px, rgba(255,255,255,0.15) 30px, transparent 31px),
+                radial-gradient(circle at 100% 100%, transparent 25px, rgba(255,255,255,0.15) 26px, rgba(255,255,255,0.15) 30px, transparent 31px),
+                
+                /* Field boundary */
+                linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.1) 2%, transparent 2%, transparent 98%, rgba(255,255,255,0.1) 98%),
+                linear-gradient(0deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.1) 2%, transparent 2%, transparent 98%, rgba(255,255,255,0.1) 98%),
+                
+                /* Grass texture pattern */
+                repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px),
+                repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 6px);
+                
+            background-size: 
+                100% 100%, 100% 100%, 100% 100%, 100% 100%,
+                100% 100%, 100% 100%, 100% 100%,
+                200px 200px,
+                100% 100%,
+                100% 100%, 100% 100%, 100% 100%, 100% 100%,
+                100% 100%, 100% 100%,
+                20px 20px, 15px 15px;
             pointer-events: none;
             z-index: -1;
+            opacity: 0.8;
+        }
+
+        /* Additional soccer elements overlay */
+        body::after {
+            content: '⚽';
+            position: fixed;
+            top: 15%;
+            left: 5%;
+            font-size: 2rem;
+            color: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Soccer ball elements scattered around */
+        .soccer-decoration {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            color: rgba(255,255,255,0.08);
+            animation: floatSlow 8s ease-in-out infinite;
+        }
+
+        .soccer-decoration:nth-child(1) { top: 20%; right: 10%; font-size: 1.5rem; animation-delay: -2s; }
+        .soccer-decoration:nth-child(2) { bottom: 25%; left: 8%; font-size: 1.8rem; animation-delay: -4s; }
+        .soccer-decoration:nth-child(3) { top: 60%; right: 15%; font-size: 1.3rem; animation-delay: -6s; }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.08; }
+            50% { transform: translateY(-15px) rotate(90deg); opacity: 0.12; }
         }
 
         .container {
@@ -637,6 +708,11 @@
     </style>
 </head>
 <body>
+    <!-- Soccer field decorations -->
+    <div class="soccer-decoration">⚽</div>
+    <div class="soccer-decoration">🥅</div>
+    <div class="soccer-decoration">⚽</div>
+    
     <div class="container">
         <!-- Demo Banner -->
         <div class="demo-banner">
