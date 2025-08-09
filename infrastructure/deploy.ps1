@@ -106,7 +106,8 @@ $frontendConfig = @"
 window.SOCCERSHARE_CONFIG = {
     apiBaseUrl: '$functionAppUrl/api',
     version: '1.0.0',
-    deployedAt: '$(Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")'
+    deployedAt: '$(Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ")',
+    paypalEmail: 'luke01215@gmail.com'
 };
 "@
 
